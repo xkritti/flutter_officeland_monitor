@@ -53,7 +53,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  var temp;
   double total = 0;
   double total_cf = 0;
   List data = [];
@@ -178,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
               var second_date = (((taskassing_list[i]['task_end'])) -
                   ((DateTime.now().millisecondsSinceEpoch) / 1000));
               final DateTime date1 = DateTime.fromMillisecondsSinceEpoch(
-                  (taskassing_list[i]['task_end'] + 432000) * 1000);
+                  (taskassing_list[i]['task_end']) * 1000);
 
               double temp_sec = second_date;
               double temp_hh = (temp_sec / 3600);
@@ -338,30 +337,30 @@ class _MyHomePageState extends State<MyHomePage> {
       "code": "officegameio",
       "scope": "officegameio",
       "table": "finishtask",
-      "lower_bound": "${wallet}",
-      "upper_bound": "${wallet}",
+      "lower_bound": wallet,
+      "upper_bound": wallet,
       "index_position": 2,
       "key_type": "name",
-      "limit": 100,
+      "limit": 500,
       "reverse": false,
       "show_payer": false
     };
-    final payload2 = {"account_name": "${wallet}"};
+    final payload2 = {"account_name": wallet};
     final payload3 = {
-      "json": true,
       "code": "officegameio",
-      "scope": "officegameio",
-      "table": "balances",
-      "lower_bound": "${wallet}",
-      "upper_bound": "${wallet}",
       "index_position": 1,
+      "json": true,
       "key_type": "",
       "limit": 1,
+      "lower_bound": wallet,
       "reverse": false,
-      "show_payer": false
+      "scope": "officegameio",
+      "show_payer": false,
+      "table": "balances",
+      "upper_bound": wallet
     };
 
-    temp = await API.post(playload);
+    var temp = await API.post(playload);
     var temp2 = await API.post1(payload2);
     var temp3 = await API.post(payload3);
 
@@ -372,17 +371,20 @@ class _MyHomePageState extends State<MyHomePage> {
     final payload6 = {
       "json": true,
       "code": "officegameio",
-      "scope": "officegameio",
       "table": "taskassign",
-      "lower_bound": "${wallet}",
-      "upper_bound": "${wallet}",
-      "index_position": 3,
+      "scope": "officegameio",
+      "index_position": "3",
       "key_type": "name",
-      "limit": 100,
-      "reverse": false,
-      "show_payer": false
+      "upper_bound": wallet,
+      "lower_bound": wallet
     };
     var temp6 = await API.post(payload6);
+
+    // print(temp);
+    // print(temp3["rows"]);
+    // print(temp4);
+    // print(temp5);
+    // print(temp6);
 
     test(i) {
       var second_date = (((i['finish_time'] + 432000)) -
@@ -402,7 +404,8 @@ class _MyHomePageState extends State<MyHomePage> {
       taskassing = temp6['rows'];
       wax_balance = temp2['core_liquid_balance'];
       ac_name = temp2['account_name'];
-      ocoin_ingame_balance = temp3['rows'][0]['quantity'];
+      ocoin_ingame_balance =
+          (temp3['rows'].length == 0) ? 0 : temp3['rows'][0]['quantity'];
       wax_price = temp4['wax']['thb'];
       ocoin_price = temp5['last_price'] * temp4['wax']['thb'];
       total;
