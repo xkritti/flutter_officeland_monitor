@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:offland_monitor/utils/api.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -469,8 +470,11 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
     // Timer.periodic(Duration(seconds: 10), (timer) {
-    timer = Timer.periodic(Duration(seconds: 25), (Timer t) => getdata());
-
+    getdata();
+    if (walletcontorller.text != Null) {
+      timer = Timer.periodic(
+          Duration(seconds: 30), (Timer t) => callapi(walletcontorller.text));
+    }
     // });
     walletcontorller.addListener(_printLastValue);
   }
@@ -493,40 +497,40 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 2.0,
         centerTitle: true,
         title: Text(widget.title),
-        actions: <Widget>[
-          IconButton(
-              onPressed: () {
-                showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                          backgroundColor: Colors.transparent,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Center(
-                                child: CircularProgressIndicator(),
-                                // child: Container(
-                                //   // height: MediaQuery.of(context).size.height,
-                                //   child: CircularProgressIndicator(),
-                                // ),
-                              )
-                            ],
-                          ));
-                    });
-                if (walletcontorller.text != "") {
-                  data = [];
-                  taskassing_list = [];
-                  callapi(walletcontorller.text);
-                }
+        // actions: <Widget>[
+        //   IconButton(
+        //       onPressed: () {
+        //         showDialog(
+        //             barrierDismissible: false,
+        //             context: context,
+        //             builder: (BuildContext context) {
+        //               return Dialog(
+        //                   backgroundColor: Colors.transparent,
+        //                   child: Stack(
+        //                     alignment: Alignment.center,
+        //                     children: [
+        //                       Center(
+        //                         child: CircularProgressIndicator(),
+        //                         // child: Container(
+        //                         //   // height: MediaQuery.of(context).size.height,
+        //                         //   child: CircularProgressIndicator(),
+        //                         // ),
+        //                       )
+        //                     ],
+        //                   ));
+        //             });
+        //         if (walletcontorller.text != "") {
+        //           data = [];
+        //           taskassing_list = [];
+        //           callapi(walletcontorller.text);
+        //         }
 
-                Timer(const Duration(seconds: 5), () {
-                  Navigator.pop(context);
-                });
-              },
-              icon: Icon(Icons.refresh)),
-        ],
+        //         Timer(const Duration(seconds: 5), () {
+        //           Navigator.pop(context);
+        //         });
+        //       },
+        //       icon: Icon(Icons.refresh)),
+        // ],
       ),
       body: Container(
         color: Color(0xff121212),
@@ -587,6 +591,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 .getInstance();
                                         prefs.setString("wallet_address",
                                             walletcontorller.text);
+                                            Fluttertoast.showToast(msg: "wax wallet update !");
                                       } else {
                                         await getdata();
                                       }
