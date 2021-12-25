@@ -121,14 +121,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             style: TextStyle(
                                 fontSize: 11, fontWeight: FontWeight.bold),
                           ),
-                          Text(DateFormat('dd/MM/yyyy HH:mm:ss').format(date2),
+                          Text(DateFormat('dd/MM/yy HH:mm:ss').format(date2),
                               style: TextStyle(fontSize: 11))
                         ]),
                         Row(children: [
                           const Text("FinishFee0% : ",
                               style: TextStyle(
                                   fontSize: 11, fontWeight: FontWeight.bold)),
-                          Text(DateFormat('dd/MM/yyyy HH:mm:ss').format(date1),
+                          Text(DateFormat('dd/MM/yy HH:mm:ss').format(date1),
                               style: TextStyle(fontSize: 11))
                         ]),
                       ],
@@ -147,10 +147,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 CircularProgressIndicator(
                   color: Colors.yellowAccent,
                 ),
-                Text('Loading ...',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ))
+                // Text('Loading ...',
+                //     style: TextStyle(
+                //       color: Colors.white,
+                //     ))
               ],
             )),
             height: height / 3,
@@ -222,20 +222,23 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: [
                         // Text('task_id : ${taskassing_list[i]['task_id']}',
                         //     style: TextStyle(fontSize: 12)),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 3.8,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                              color: xcolor),
-                          padding: EdgeInsets.all(2),
-                          child: Center(
-                            child: Text(
-                                '${taskassing_list[i]['name']} : ${taskassing_list[i]['rarity']}',
-                                // Text("${name}",
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xfff9f6ee))),
+                        Flexible(
+                          flex: 2,
+                          child: Container(
+                            // width: MediaQuery.of(context).size.width / 3.8,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: xcolor),
+                            padding: EdgeInsets.all(2),
+                            child: Center(
+                              child: Text(
+                                  '${taskassing_list[i]['name']} : ${taskassing_list[i]['rarity']}',
+                                  // Text("${name}",
+                                  style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xfff9f6ee))),
+                            ),
                           ),
                         ),
                         // Text('${hh}:${mm}:${ss}',
@@ -246,7 +249,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         //           : Color(0xfff9f6ee),
                         //       fontWeight: FontWeight.bold,
                         //     )),
-                        Expanded(
+                        Flexible(
+                          flex: 2,
                           child: Container(
                             // width: MediaQuery.of(context).size.width / 3,
                             margin: EdgeInsets.symmetric(horizontal: 6),
@@ -256,34 +260,43 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ? Colors.green
                                     : Colors.blueGrey[900]),
                             padding: EdgeInsets.all(2),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(DateFormat('dd/MM/yy').format(date1),
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xfff9f6ee),
+                                      )),
+                                  Text(DateFormat('HH:mm').format(date1),
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xfff9f6ee),
+                                      )),
+                                ]),
+                          ),
+                        ),
+                        Flexible(
+                          child: Container(
+                            // width: MediaQuery.of(context).size.width / 5.5,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: (hh == 0 && mm == 0 && ss == 0)
+                                    ? Colors.green
+                                    : Colors.blueGrey[900]),
+                            padding: EdgeInsets.all(2),
                             child: Center(
-                              child: Text(
-                                  DateFormat('dd/MM/yyyy HH:mm:ss')
-                                      .format(date1),
+                              child: Text("${hh}:${mm}:${ss}",
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 11,
                                     fontWeight: FontWeight.bold,
                                     color: Color(0xfff9f6ee),
                                   )),
                             ),
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 5.5,
-                          // width: MediaQuery.of(context).size.width / 3,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                              color: (hh == 0 && mm == 0 && ss == 0)
-                                  ? Colors.green
-                                  : Colors.blueGrey[900]),
-                          padding: EdgeInsets.all(2),
-                          child: Center(
-                            child: Text("${hh}:${mm}:${ss}",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xfff9f6ee),
-                                )),
                           ),
                         )
                       ],
@@ -317,10 +330,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 CircularProgressIndicator(
                   color: Colors.yellowAccent,
                 ),
-                Text('Loading ...',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ))
+                // Text('Loading ...',
+                //     style: TextStyle(
+                //       color: Colors.white,
+                //     ))
               ],
             )),
             height: height / 3,
@@ -329,7 +342,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   callapi(wallet) async {
     taskassing_list = [];
-    data = [];
+    // data = [];
     total = 0;
     total_cf = 0;
     final playload = {
@@ -427,6 +440,8 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         taskassing_list.add(data_list);
       });
+      taskassing_list.sort((a, b) => a['task_end'].compareTo(b['task_end']));
+      // print(taskassing_list);
     });
   }
 
@@ -447,12 +462,15 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Timer? timer;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     // Timer.periodic(Duration(seconds: 10), (timer) {
-    getdata();
+    timer = Timer.periodic(Duration(seconds: 25), (Timer t) => getdata());
+
     // });
     walletcontorller.addListener(_printLastValue);
   }
