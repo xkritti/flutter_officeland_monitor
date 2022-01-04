@@ -242,14 +242,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         ),
-                        // Text('${hh}:${mm}:${ss}',
-                        //     style: TextStyle(
-                        //       fontSize: 12,
-                        //       color: (hh == 0 && mm == 0 && ss == 0)
-                        //           ? text_success_color
-                        //           : Color(0xfff9f6ee),
-                        //       fontWeight: FontWeight.bold,
-                        //     )),
                         Flexible(
                           flex: 2,
                           child: Container(
@@ -302,21 +294,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         )
                       ],
                     ),
-                    // Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                    //   const Text(
-                    //     "FinishTask @ ",
-                    //     style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    //   ),
-                    //   Text(DateFormat('dd/MM/yyyy HH:mm:ss').format(date2),
-                    //       style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))
-                    // ]),
-                    // Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                    //   const Text("Fee 0% @ ",
-                    //       style:
-                    //           TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                    //   Text(DateFormat('dd/MM/yyyy HH:mm:ss').format(date1),
-                    //       style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))
-                    // ]),
                   ],
                 ),
               );
@@ -331,10 +308,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 CircularProgressIndicator(
                   color: Colors.yellowAccent,
                 ),
-                // Text('Loading ...',
-                //     style: TextStyle(
-                //       color: Colors.white,
-                //     ))
               ],
             )),
             height: height / 3,
@@ -343,7 +316,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   callapi(wallet) async {
     taskassing_list = [];
-    // data = [];
     total = 0;
     total_cf = 0;
     final playload = {
@@ -390,15 +362,10 @@ class _MyHomePageState extends State<MyHomePage> {
       "index_position": "3",
       "key_type": "name",
       "upper_bound": wallet,
-      "lower_bound": wallet
+      "lower_bound": wallet,
+      "limit": 30
     };
     var temp6 = await API.post(payload6);
-
-    // print(temp);
-    // print(temp3["rows"]);
-    // print(temp4);
-    // print(temp5);
-    // print(temp6);
 
     test(i) {
       var second_date = (((i['finish_time'] + 432000)) -
@@ -413,6 +380,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     await temp['rows'].forEach((i) => {test(i)});
+
     setState(() {
       data = temp['rows'];
       taskassing = temp6['rows'];
@@ -425,13 +393,9 @@ class _MyHomePageState extends State<MyHomePage> {
       total;
     });
 
-    taskassing.forEach((element) async {
+    await temp6['rows'].forEach((element) async {
       final res = await API.get(
           "https://wax.api.atomicassets.io/atomicassets/v1/assets/${element['asset_id']}");
-      // print("name : ${res['data']['template']['immutable_data']['name']}");
-      // print("rarity : ${res['data']['template']['immutable_data']['rarity']}");
-      // print('task_id : ${element['task_id']}');
-      // print('task_end : ${element['task_end']}');
       Map data_list = {
         "name": res['data']['template']['immutable_data']['name'],
         "rarity": res['data']['template']['immutable_data']['rarity'],
@@ -442,7 +406,6 @@ class _MyHomePageState extends State<MyHomePage> {
         taskassing_list.add(data_list);
       });
       taskassing_list.sort((a, b) => a['task_end'].compareTo(b['task_end']));
-      // print(taskassing_list);
     });
   }
 
@@ -473,7 +436,7 @@ class _MyHomePageState extends State<MyHomePage> {
     getdata();
     if (walletcontorller.text != Null) {
       timer = Timer.periodic(
-          Duration(seconds: 30), (Timer t) => callapi(walletcontorller.text));
+          Duration(seconds: 15), (Timer t) => callapi(walletcontorller.text));
     }
     // });
     walletcontorller.addListener(_printLastValue);
@@ -544,7 +507,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 6),
                     width: (MediaQuery.of(context).size.width / 10) * 8.5,
-                    margin: EdgeInsets.only(top: 20),
+                    margin: EdgeInsets.only(top: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: Color(0xff2c2c30),
@@ -591,7 +554,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 .getInstance();
                                         prefs.setString("wallet_address",
                                             walletcontorller.text);
-                                            Fluttertoast.showToast(msg: "wax wallet update !");
+                                        Fluttertoast.showToast(
+                                            msg: "wax wallet update !");
                                       } else {
                                         await getdata();
                                       }
@@ -723,12 +687,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       maxWidth: width,
                       minWidth: 150.0,
                       minHeight: 150.0),
-                  margin: EdgeInsets.only(top: (height / 100)),
+                  // margin: EdgeInsets.only(top: (height / 100)),
                   // child: itemList(),
                   child: Column(children: [
                     Flexible(child: itemList()),
                     Container(
-                      margin: EdgeInsets.only(top: 8, bottom: 5),
+                      // margin: EdgeInsets.only(top: 8, bottom: 5),
+                      padding: EdgeInsets.symmetric(vertical: 5),
                       width: (MediaQuery.of(context).size.width / 10) * 8.5,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -752,6 +717,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                     Flexible(flex: 2, child: tasklist()),
+                    SizedBox(height: 15,)
                   ]),
                 ),
               ],
@@ -761,7 +727,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
       bottomNavigationBar: Container(
           color: Color(0xff263d4d),
-          padding: EdgeInsets.symmetric(vertical: 8),
+          padding: EdgeInsets.symmetric(vertical: 4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
